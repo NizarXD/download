@@ -1,11 +1,9 @@
-//KELAMAAN MALAM NIH AMBIL AJA
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TikTok Downloader kaizel</title>
+    <title>All Social Media Downloader</title>
     <style>
         * {
             margin: 0;
@@ -21,8 +19,8 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            overflow: auto; /* Memungkinkan scroll */
-            min-height: 100vh; /* Pastikan minimal tinggi penuh layar */
+            overflow: auto;
+            min-height: 100vh;
         }
 
         #particles-js {
@@ -80,21 +78,6 @@
             75% { transform: translateX(5px); }
         }
 
-        .video-container {
-            margin: 20px 0;
-        }
-
-        video {
-            width: 100%;
-            border-radius: 8px;
-        }
-
-        .hashtags {
-            color: #ff6f61;
-            margin: 10px 0;
-            font-size: 1.2em;
-        }
-
         button {
             padding: 12px 20px;
             font-size: 1em;
@@ -105,7 +88,6 @@
             cursor: pointer;
             transition: background 0.3s;
             margin: 5px 0;
-            position: relative;
         }
 
         button:hover {
@@ -118,24 +100,14 @@
             margin-top: 10px;
         }
     </style>
-</head
-
+</head>
 <body>
-  
     <div id="particles-js"></div>
     <div class="container">
-        <h1>TikTok Downloader</h1>
-        <p>Masukkan link video TikTok yang ingin diunduh:</p>
-        <input type="text" id="url" placeholder="Tempelkan tautan TikTok di sini">
-        <button onclick="downloadVideo()">Download</button>
-        
-        <div id="video-section" class="video-container" style="display: none;">
-            <video id="video" controls></video>
-            <div class="hashtags" id="hashtags"></div>
-            <button id="copy-hashtags" style="display: none;" onclick="copyHashtags()">Salin Hashtag</button>
-            <button id="download-video" style="display: none;">Download Video</button>
-            <button id="download-audio" style="display: none;">Download Audio</button>
-        </div>
+        <h1>All Social Media Downloader</h1>
+        <p>Masukkan link video dari TikTok, Instagram, Facebook, atau Twitter yang ingin diunduh:</p>
+        <input type="text" id="url" placeholder="Tempelkan tautan di sini">
+        <button onclick="downloadContent()">Download</button>
         <p id="message"></p>
     </div>
 
@@ -146,116 +118,82 @@
             console.log('callback - particles.js config loaded');
         });
 
-        async function tiktok2(query) {
-            return new Promise(async (resolve, reject) => {
-                try {
-                    const encodedParams = new URLSearchParams();
-                    encodedParams.set('url', query);
-                    encodedParams.set('hd', '1');
-
-                    const response = await axios({
-                        method: 'POST',
-                        url: 'https://tikwm.com/api/',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                            'Cookie': 'current_language=en',
-                            'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Mobile Safari/537.36'
-                        },
-                        data: encodedParams
-                    });
-
-                    const videos = response.data.data;
-                    if (!videos) {
-                        throw new Error("Data video tidak ditemukan dalam respons.");
-                    }
-
-                    const result = {
-                        title: videos.title,
-                        hashtags: videos.title.match(/#[\w]+/g) || [],
-                        no_watermark: videos.play,
-                        music: videos.music
-                    };
-
-                    resolve(result);
-                } catch (error) {
-                    console.error("Error fetching TikTok video:", error);
-                    reject("Maaf, terjadi kesalahan saat mengunduh video.");
-                }
-            });
-        }
-//KAIZEL KAZAMI
-        async function downloadVideo() {
-            const url = document.getElementById('url');
+        async function downloadContent() {
+            const url = document.getElementById('url').value;
             const message = document.getElementById('message');
-            const videoSection = document.getElementById('video-section');
-            const videoElement = document.getElementById('video');
-            const hashtagsElement = document.getElementById('hashtags');
-            const copyHashtagsButton = document.getElementById('copy-hashtags');
-            const downloadVideoButton = document.getElementById('download-video');
-            const downloadAudioButton = document.getElementById('download-audio');
-
-            if (url.value) {
+            
+            if (url) {
                 message.textContent = "Mengunduh...";
-                url.classList.remove('error');
-
-                try {
-                    const videoData = await tiktok2(url.value);
-                    message.textContent = `Video berhasil diunduh: ${videoData.title}`;
-                    
-                    videoElement.src = videoData.no_watermark;
-                    videoSection.style.display = "block";
-                    
-                    hashtagsElement.textContent = videoData.hashtags.join(' ');
-                    copyHashtagsButton.style.display = "block";
-
-                    downloadVideoButton.textContent = "Download Video";
-                    downloadVideoButton.style.display = "block";
-                    downloadVideoButton.onclick = function() {
-                        const link = document.createElement('a');
-                        link.href = videoData.no_watermark;
-                        link.download = `${videoData.title}.mp4`;
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                    };
-
-                    downloadAudioButton.textContent = "Download Audio";
-                    downloadAudioButton.style.display = "block";
-                    downloadAudioButton.onclick = function() {
-                        const link = document.createElement('a');
-                        link.href = videoData.music;
-                        link.download = `${videoData.title}.mp3`;
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                    };
-                } catch (error) {
-                    message.textContent = error;
-                    triggerErrorFeedback(url); 
+                
+                if (url.includes("tiktok.com")) {
+                    await downloadFromTikTok(url);
+                } else if (url.includes("instagram.com")) {
+                    await downloadFromInstagram(url);
+                } else if (url.includes("facebook.com")) {
+                    await downloadFromFacebook(url);
+                } else if (url.includes("twitter.com")) {
+                    await downloadFromTwitter(url);
+                } else {
+                    message.textContent = "Platform tidak dikenali, silakan masukkan tautan dari TikTok, Instagram, Facebook, atau Twitter.";
                 }
             } else {
-                alert("Silakan masukkan tautan TikTok yang valid.");
-                triggerErrorFeedback(url); 
+                alert("Silakan masukkan tautan yang valid.");
             }
         }
-// kaizel copy rigt jangan di hapus ya nanti erorr
-        function triggerErrorFeedback(element) {
-            element.classList.add('error');
-            setTimeout(() => {
-                element.classList.remove('error');
-            }, 500);
+
+        async function downloadFromTikTok(url) {
+            try {
+                const response = await axios.post('https://api.tiktok-downloader.com', { url });
+                const videoUrl = response.data.videoUrl;
+                downloadFile(videoUrl, "video_tiktok.mp4");
+            } catch (error) {
+                console.error("Error TikTok:", error);
+                message.textContent = "Gagal mengunduh dari TikTok.";
+            }
         }
 
-        function copyHashtags() {
-            const hashtagsText = document.getElementById('hashtags').textContent;
-            navigator.clipboard.writeText(hashtagsText)
-                .then(() => {
-                    alert("Hashtag berhasil disalin!");
-                })
-                .catch(err => {
-                    console.error('Gagal menyalin: ', err);
-                });
+        async function downloadFromInstagram(url) {
+            try {
+                const response = await axios.post('https://api.instagram-downloader.com', { url });
+                const videoUrl = response.data.videoUrl;
+                downloadFile(videoUrl, "video_instagram.mp4");
+            } catch (error) {
+                console.error("Error Instagram:", error);
+                message.textContent = "Gagal mengunduh dari Instagram.";
+            }
+        }
+
+        async function downloadFromFacebook(url) {
+            try {
+                const response = await axios.post('https://api.facebook-downloader.com', { url });
+                const videoUrl = response.data.videoUrl;
+                downloadFile(videoUrl, "video_facebook.mp4");
+            } catch (error) {
+                console.error("Error Facebook:", error);
+                message.textContent = "Gagal mengunduh dari Facebook.";
+            }
+        }
+
+        async function downloadFromTwitter(url) {
+            try {
+                const response = await axios.post('https://api.twitter-downloader.com', { url });
+                const videoUrl = response.data.videoUrl;
+                downloadFile(videoUrl, "video_twitter.mp4");
+            } catch (error) {
+                console.error("Error Twitter:", error);
+                message.textContent = "Gagal mengunduh dari Twitter.";
+            }
+        }
+
+        function downloadFile(url, filename) {
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            document.getElementById('message').textContent = "Download berhasil!";
         }
     </script>
 </body>
-    </html>
+</html>
