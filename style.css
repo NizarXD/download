@@ -2,88 +2,81 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: Arial, sans-serif;
 }
 
 body {
-    font-family: 'Georgia', serif;
-    background: #ffe4e1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #f3f4f6;
     color: #333;
-    line-height: 1.6;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    text-align: center;
 }
 
 header {
-    margin-bottom: 40px;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 header h1 {
-    font-size: 3em;
-    color: #d2691e;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    font-size: 2em;
+    color: #333;
 }
 
 header p {
-    font-size: 1.5em;
-    color: #b22222;
+    font-size: 1em;
+    color: #666;
 }
 
-.main-content {
+.container {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    text-align: center;
+}
+
+form {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-bottom: 50px;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.image-container {
-    flex: 1;
-    margin: 20px;
+input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    width: 100%;
 }
 
-.image-container img {
-    max-width: 100%;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+button {
+    padding: 12px;
+    background-color: #0f9d58;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
 }
 
-.text-content {
-    flex: 1;
-    margin: 20px;
+button:hover {
+    background-color: #0b7a44;
 }
 
-.text-content h2 {
-    font-size: 2.5em;
-    margin-bottom: 20px;
-    color: #8b0000;
-}
-
-.text-content p {
-    font-size: 1.2em;
-    color: #4b0082;
-}
-
-.btn {
-    display: inline-block;
-    background-color: #d2691e;
-    color: white;
-    padding: 10px 20px;
-    text-decoration: none;
-    border-radius: 20px;
-    margin-top: 20px;
-    transition: background-color 0.3s ease;
-}
-
-.btn:hover {
-    background-color: #b22222;
+#statusMessage {
+    margin-top: 15px;
+    font-size: 0.9em;
+    color: #888;
 }
 
 footer {
-    margin-top: 50px;
-    font-size: 1em;
-    color: #b22222;
+    margin-top: 20px;
+    text-align: center;
+    color: #999;
+    font-size: 0.8em;
 }
