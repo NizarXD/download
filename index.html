@@ -1,25 +1,261 @@
+//KELAMAAN MALAM NIH AMBIL AJA
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Downloader All Sosmed</title>
+    <title>TikTok Downloader kaizel</title>
     <style>
-        /* Tambahkan style untuk desain sederhana */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            color: #fff;
+            background-color: #282c34;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            overflow: auto; /* Memungkinkan scroll */
+            min-height: 100vh; /* Pastikan minimal tinggi penuh layar */
+        }
+
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(50, 50, 50, 0.8);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            max-width: 400px;
+            margin: auto;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: #ff6f61;
+        }
+
+        p {
+            font-size: 1em;
+            color: #ddd;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 1em;
+            margin: 10px 0;
+            color: #282c34;
+            text-align: center;
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+
+        input[type="text"].error {
+            border-color: #ff4d4d;
+            background-color: #ffe6e6;
+            animation: shake 0.3s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .video-container {
+            margin: 20px 0;
+        }
+
+        video {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        .hashtags {
+            color: #ff6f61;
+            margin: 10px 0;
+            font-size: 1.2em;
+        }
+
+        button {
+            padding: 12px 20px;
+            font-size: 1em;
+            border: none;
+            background-color: #ff6f61;
+            color: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin: 5px 0;
+            position: relative;
+        }
+
+        button:hover {
+            background-color: #ff8a80;
+        }
+
+        #message {
+            color: #ff6f61;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
     </style>
-</head>
+</head
+
 <body>
-    <h1>Downloader All Sosmed</h1>
-    <form action="/download" method="post">
-        <input type="text" name="url" placeholder="Masukkan URL video" required>
-        <select name="platform">
-            <option value="youtube">YouTube</option>
-            <option value="instagram">Instagram</option>
-            <option value="twitter">Twitter</option>
-            <option value="tiktok">TikTok</option>
-            <!-- Tambahkan platform lain jika perlu -->
-        </select>
-        <button type="submit">Download</button>
-    </form>
+  
+    <div id="particles-js"></div>
+    <div class="container">
+        <h1>TikTok Downloader</h1>
+        <p>Masukkan link video TikTok yang ingin diunduh:</p>
+        <input type="text" id="url" placeholder="Tempelkan tautan TikTok di sini">
+        <button onclick="downloadVideo()">Download</button>
+        
+        <div id="video-section" class="video-container" style="display: none;">
+            <video id="video" controls></video>
+            <div class="hashtags" id="hashtags"></div>
+            <button id="copy-hashtags" style="display: none;" onclick="copyHashtags()">Salin Hashtag</button>
+            <button id="download-video" style="display: none;">Download Video</button>
+            <button id="download-audio" style="display: none;">Download Audio</button>
+        </div>
+        <p id="message"></p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        particlesJS.load('particles-js', 'https://cdn.rawgit.com/VincentGarreau/particles.js/master/demo/js/config.json', function() {
+            console.log('callback - particles.js config loaded');
+        });
+
+        async function tiktok2(query) {
+            return new Promise(async (resolve, reject) => {
+                try {
+                    const encodedParams = new URLSearchParams();
+                    encodedParams.set('url', query);
+                    encodedParams.set('hd', '1');
+
+                    const response = await axios({
+                        method: 'POST',
+                        url: 'https://tikwm.com/api/',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                            'Cookie': 'current_language=en',
+                            'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Mobile Safari/537.36'
+                        },
+                        data: encodedParams
+                    });
+
+                    const videos = response.data.data;
+                    if (!videos) {
+                        throw new Error("Data video tidak ditemukan dalam respons.");
+                    }
+
+                    const result = {
+                        title: videos.title,
+                        hashtags: videos.title.match(/#[\w]+/g) || [],
+                        no_watermark: videos.play,
+                        music: videos.music
+                    };
+
+                    resolve(result);
+                } catch (error) {
+                    console.error("Error fetching TikTok video:", error);
+                    reject("Maaf, terjadi kesalahan saat mengunduh video.");
+                }
+            });
+        }
+//KAIZEL KAZAMI
+        async function downloadVideo() {
+            const url = document.getElementById('url');
+            const message = document.getElementById('message');
+            const videoSection = document.getElementById('video-section');
+            const videoElement = document.getElementById('video');
+            const hashtagsElement = document.getElementById('hashtags');
+            const copyHashtagsButton = document.getElementById('copy-hashtags');
+            const downloadVideoButton = document.getElementById('download-video');
+            const downloadAudioButton = document.getElementById('download-audio');
+
+            if (url.value) {
+                message.textContent = "Mengunduh...";
+                url.classList.remove('error');
+
+                try {
+                    const videoData = await tiktok2(url.value);
+                    message.textContent = `Video berhasil diunduh: ${videoData.title}`;
+                    
+                    videoElement.src = videoData.no_watermark;
+                    videoSection.style.display = "block";
+                    
+                    hashtagsElement.textContent = videoData.hashtags.join(' ');
+                    copyHashtagsButton.style.display = "block";
+
+                    downloadVideoButton.textContent = "Download Video";
+                    downloadVideoButton.style.display = "block";
+                    downloadVideoButton.onclick = function() {
+                        const link = document.createElement('a');
+                        link.href = videoData.no_watermark;
+                        link.download = `${videoData.title}.mp4`;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    };
+
+                    downloadAudioButton.textContent = "Download Audio";
+                    downloadAudioButton.style.display = "block";
+                    downloadAudioButton.onclick = function() {
+                        const link = document.createElement('a');
+                        link.href = videoData.music;
+                        link.download = `${videoData.title}.mp3`;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    };
+                } catch (error) {
+                    message.textContent = error;
+                    triggerErrorFeedback(url); 
+                }
+            } else {
+                alert("Silakan masukkan tautan TikTok yang valid.");
+                triggerErrorFeedback(url); 
+            }
+        }
+// kaizel copy rigt jangan di hapus ya nanti erorr
+        function triggerErrorFeedback(element) {
+            element.classList.add('error');
+            setTimeout(() => {
+                element.classList.remove('error');
+            }, 500);
+        }
+
+        function copyHashtags() {
+            const hashtagsText = document.getElementById('hashtags').textContent;
+            navigator.clipboard.writeText(hashtagsText)
+                .then(() => {
+                    alert("Hashtag berhasil disalin!");
+                })
+                .catch(err => {
+                    console.error('Gagal menyalin: ', err);
+                });
+        }
+    </script>
 </body>
-</html>
+    </html>
