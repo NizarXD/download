@@ -3,20 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lokasi Kami</title>
+    <title>Downloader All Sosmed</title>
+    <style>
+        /* Tambahkan style untuk desain sederhana */
+    </style>
 </head>
 <body>
-    <h1>Lokasi Kami</h1>
-    <p>Alamat: Jl. Contoh Alamat No. 123, Jakarta</p>
-    
-    <!-- Sematkan peta dari Google Maps -->
-    <iframe 
-        src="https://geocode.search.hereapi.com/v1/geocode?q=Invalidenstr+117+Berlin&apiKey=Js1eBy76Njmj_joARqyxZxjA6KOUjnA25QJKARz1xy0" 
-        width="600" 
-        height="450" 
-        style="border:0;" 
-        allowfullscreen="" 
-        loading="lazy">
-    </iframe>
+    <h1>Downloader All Sosmed</h1>
+    <form action="/download" method="post">
+        <input type="text" name="url" placeholder="Masukkan URL video" required>
+        <select name="platform">
+            <option value="youtube">YouTube</option>
+            <option value="instagram">Instagram</option>
+            <option value="twitter">Twitter</option>
+            <option value="tiktok">TikTok</option>
+            <!-- Tambahkan platform lain jika perlu -->
+        </select>
+        <button type="submit">Download</button>
+    </form>
 </body>
 </html>
