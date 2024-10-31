@@ -3,197 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Social Media Downloader</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            color: #fff;
-            background-color: #282c34;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            overflow: auto;
-            min-height: 100vh;
-        }
-
-        #particles-js {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
-
-        .container {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            padding: 40px 20px;
-            background: rgba(50, 50, 50, 0.8);
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-            max-width: 400px;
-            margin: auto;
-        }
-
-        h1 {
-            font-size: 2em;
-            margin-bottom: 10px;
-            color: #ff6f61;
-        }
-
-        p {
-            font-size: 1em;
-            color: #ddd;
-            margin-bottom: 10px;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            font-size: 1em;
-            margin: 10px 0;
-            color: #282c34;
-            text-align: center;
-            transition: border-color 0.3s, background-color 0.3s;
-        }
-
-        input[type="text"].error {
-            border-color: #ff4d4d;
-            background-color: #ffe6e6;
-            animation: shake 0.3s ease;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-
-        button {
-            padding: 12px 20px;
-            font-size: 1em;
-            border: none;
-            background-color: #ff6f61;
-            color: #fff;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.3s;
-            margin: 5px 0;
-        }
-
-        button:hover {
-            background-color: #ff8a80;
-        }
-
-        #message {
-            color: #ff6f61;
-            font-size: 0.9em;
-            margin-top: 10px;
-        }
-    </style>
+    <title>Downloader TikTok Tanpa Watermark</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="particles-js"></div>
-    <div class="container">
-        <h1>All Social Media Downloader</h1>
-        <p>Masukkan link video dari TikTok, Instagram, Facebook, atau Twitter yang ingin diunduh:</p>
-        <input type="text" id="url" placeholder="Tempelkan tautan di sini">
-        <button onclick="downloadContent()">Download</button>
-        <p id="message"></p>
-    </div>
+    <header>
+        <h1>Downloader TikTok</h1>
+        <p>Unduh video TikTok tanpa watermark dengan mudah</p>
+    </header>
+    
+    <main>
+        <div class="container">
+            <form id="downloadForm">
+                <input type="text" id="videoURL" placeholder="Masukkan URL video TikTok" required>
+                <button type="submit">Unduh Video</button>
+            </form>
+            <p id="statusMessage"></p>
+        </div>
+    </main>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script>
-        particlesJS.load('particles-js', 'https://cdn.rawgit.com/VincentGarreau/particles.js/master/demo/js/config.json', function() {
-            console.log('callback - particles.js config loaded');
-        });
+    <footer>
+        <p>&copy; 2024 Downloader TikTok. Semua hak dilindungi.</p>
+    </footer>
 
-        async function downloadContent() {
-            const url = document.getElementById('url').value;
-            const message = document.getElementById('message');
-            
-            if (url) {
-                message.textContent = "Mengunduh...";
-                
-                if (url.includes("tiktok.com")) {
-                    await downloadFromTikTok(url);
-                } else if (url.includes("instagram.com")) {
-                    await downloadFromInstagram(url);
-                } else if (url.includes("facebook.com")) {
-                    await downloadFromFacebook(url);
-                } else if (url.includes("twitter.com")) {
-                    await downloadFromTwitter(url);
-                } else {
-                    message.textContent = "Platform tidak dikenali, silakan masukkan tautan dari TikTok, Instagram, Facebook, atau Twitter.";
-                }
-            } else {
-                alert("Silakan masukkan tautan yang valid.");
-            }
-        }
-
-        async function downloadFromTikTok(url) {
-            try {
-                const response = await axios.post('https://api.tiktok-downloader.com', { url });
-                const videoUrl = response.data.videoUrl;
-                downloadFile(videoUrl, "video_tiktok.mp4");
-            } catch (error) {
-                console.error("Error TikTok:", error);
-                message.textContent = "Gagal mengunduh dari TikTok.";
-            }
-        }
-
-        async function downloadFromInstagram(url) {
-            try {
-                const response = await axios.post('https://api.instagram-downloader.com', { url });
-                const videoUrl = response.data.videoUrl;
-                downloadFile(videoUrl, "video_instagram.mp4");
-            } catch (error) {
-                console.error("Error Instagram:", error);
-                message.textContent = "Gagal mengunduh dari Instagram.";
-            }
-        }
-
-        async function downloadFromFacebook(url) {
-            try {
-                const response = await axios.post('https://api.facebook-downloader.com', { url });
-                const videoUrl = response.data.videoUrl;
-                downloadFile(videoUrl, "video_facebook.mp4");
-            } catch (error) {
-                console.error("Error Facebook:", error);
-                message.textContent = "Gagal mengunduh dari Facebook.";
-            }
-        }
-
-        async function downloadFromTwitter(url) {
-            try {
-                const response = await axios.post('https://api.twitter-downloader.com', { url });
-                const videoUrl = response.data.videoUrl;
-                downloadFile(videoUrl, "video_twitter.mp4");
-            } catch (error) {
-                console.error("Error Twitter:", error);
-                message.textContent = "Gagal mengunduh dari Twitter.";
-            }
-        }
-
-        function downloadFile(url, filename) {
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = filename;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            document.getElementById('message').textContent = "Download berhasil!";
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
